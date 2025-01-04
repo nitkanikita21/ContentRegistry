@@ -1,0 +1,11 @@
+[versions]
+minecraft-version = "1.20.4-R0.1-SNAPSHOT"
+sponge-configurate = "4.1.2"
+vavr = "0.10.5"
+lombok = "1.18.36"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "minecraft-version" }
+vavr = { module = "io.vavr:vavr", version.ref = "vavr" }
+sponge-configurate = { module = "org.spongepowered:configurate-core", version.ref = "sponge-configurate" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
