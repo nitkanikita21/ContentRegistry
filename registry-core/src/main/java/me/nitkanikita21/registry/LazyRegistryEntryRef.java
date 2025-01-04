@@ -1,8 +1,8 @@
 package me.nitkanikita21.registry;
 
-import io.vavr.Lazy;
 import lombok.Getter;
 import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -27,10 +27,7 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
     @Getter
     private final Registry<T> registry;
 
-    /**
-     * A lazy-loaded instance of the actual registry entry.
-     */
-    private final Lazy<RegistryEntry<T>> lazyEntry;
+    private @Nullable RegistryEntry<T> lazyEntry = null;
 
     /**
      * Constructs a lazy registry entry reference.
@@ -41,11 +38,6 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
     public LazyRegistryEntryRef(Key key, Registry<T> registry) {
         this.key = key;
         this.registry = registry;
-        lazyEntry = Lazy.of(() -> registry.getEntry(key).getOrElseThrow(RuntimeException::new));
-
-        registry.getEntry(key).on((i) -> {
-
-        });
     }
 
     /**
@@ -57,7 +49,7 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
      */
     @Override
     public T getValue() {
-        return lazyEntry.get().getValue();
+        return getLazyEntry().getValue();
     }
 
     /**
@@ -69,6 +61,13 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
      */
     @Override
     public Set<Key> getTags() {
-        return lazyEntry.get().getTags();
+        return getLazyEntry().getTags();
+    }
+
+    private RegistryEntry<T> getLazyEntry() {
+        if(lazyEntry == null) {
+            lazyEntry = registry.getEntry(key).orElseThrow();
+        }
+        return lazyEntry;
     }
 }

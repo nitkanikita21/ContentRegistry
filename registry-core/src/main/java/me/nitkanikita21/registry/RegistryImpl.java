@@ -1,7 +1,6 @@
 package me.nitkanikita21.registry;
 
 import com.google.common.collect.Lists;
-import io.vavr.control.Option;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.key.Key;
@@ -31,12 +30,12 @@ public class RegistryImpl<T> implements Registry<T> {
     }
 
     @Override
-    public Option<T> get(Key key) {
-        return Option.of(entries.get(key));
+    public Optional<T> get(Key key) {
+        return Optional.of(entries.get(key));
     }
 
     @Override
-    public Option<RegistryEntry<T>> getEntry(Key key) {
+    public Optional<RegistryEntry<T>> getEntry(Key key) {
         return get(key).map(obj -> new RegistryEntryImpl<>(this, key, obj));
     }
 
@@ -81,12 +80,12 @@ public class RegistryImpl<T> implements Registry<T> {
 
     @Override
     public List<RegistryEntry<T>> getAllEntriesByTag(Key tag) {
-        return Option.of(tags.get(tag))
+        return Optional.of(tags.get(tag))
             .map(entriesWithTag -> entriesWithTag.stream()
-                .map(entryKey -> getEntry(entryKey).getOrNull())
+                .map(entryKey -> getEntry(entryKey).orElse(null))
                 .filter(Objects::nonNull)
                 .toList()
-            ).getOrElse(List::of);
+            ).orElseGet(List::of);
     }
 
     @Override
@@ -107,4 +106,5 @@ public class RegistryImpl<T> implements Registry<T> {
     public @NotNull Key key() {
         return id;
     }
+
 }

@@ -43,7 +43,7 @@ public class Items {
 
 ```java
 Option<Item> itemOption = Items.REGISTRY.get(Key.key("my:apple")); // vavr option
-if(!itemOption.isEmpty()){
+if(itemOption.isPresent()){
     // If the item is found in the registry
 }
 ```

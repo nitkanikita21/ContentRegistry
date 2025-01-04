@@ -8,8 +8,9 @@ group = "me.nitkanikita21"
 version = "1.0"
 
 dependencies {
-    compileOnlyApi(libs.paper.api)
-    api(libs.vavr)
+    compileOnlyApi(libs.adventure.api)
+    compileOnlyApi(libs.guava)
+
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
     implementation(kotlin("stdlib-jdk8"))

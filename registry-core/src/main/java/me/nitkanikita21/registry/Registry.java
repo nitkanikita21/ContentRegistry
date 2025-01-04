@@ -1,11 +1,11 @@
 package me.nitkanikita21.registry;
 
-import io.vavr.control.Option;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a registry that maps unique keys to elements of type T.
@@ -39,17 +39,17 @@ public interface Registry<T> extends Keyed {
      * Retrieves an element from the registry by its unique key.
      *
      * @param key the unique identifier
-     * @return the element if found, or Option.empty() if not found
+     * @return the element if found, or Optional.empty() if not found
      */
-    Option<T> get(Key key);
+    Optional<T> get(Key key);
 
     /**
      * Retrieves the RegistryEntry containing the element and its metadata from the registry by its unique key.
      *
      * @param key the unique identifier
-     * @return the RegistryEntry if found, or Option.empty() if not found
+     * @return the RegistryEntry if found, or Optional.empty() if not found
      */
-    Option<RegistryEntry<T>> getEntry(Key key);
+    Optional<RegistryEntry<T>> getEntry(Key key);
 
     /**
      * Checks if an element exists in the registry with the specified key.
