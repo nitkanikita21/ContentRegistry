@@ -6,8 +6,6 @@ plugins {
 group = "me.nitkanikita21"
 version = "1.0"
 
-
-
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
@@ -27,9 +25,7 @@ subprojects {
                 artifactId = base.archivesName.get()
 
                 pom {
-                    name.set("My Library")
-                    description.set("A simple library for demonstration purposes")
-                    url.set("https://example.com/my-library")
+                    name.set(base.archivesName.get())
                     licenses {
                         license {
                             name.set("MIT License")
