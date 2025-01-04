@@ -43,11 +43,9 @@ public class Items {
 
 ```java
 Option<Item> itemOption = Items.REGISTRY.get(Key.key("my:apple")); // vavr option
-if(!itemOption.
-
-isEmpty()){
+if(!itemOption.isEmpty()){
     // If the item is found in the registry
-    }
+}
 ```
 
 ### Grouping Items into Tags
@@ -69,11 +67,7 @@ public class Tags {
 List<Item> fruits = ItemRegistry.ITEMS.getAllByTag(Tags.FRUITS);
 
 println("Fruits in the registry:");
-fruits.
-
-forEach(entry ->
-
-println(entry.getName()));
+fruits.forEach(entry -> println(entry.getName()));
 ```
 
 ### Using Deferred Registration
@@ -92,9 +86,7 @@ public class Register {
 }
 
 // Finalize and use the deferred registry
-Register.
-
-finalizeRegistry();
+Register.finalizeRegistry();
 
 println("Registered deferred items:");
 
