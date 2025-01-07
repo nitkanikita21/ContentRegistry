@@ -2,7 +2,6 @@ package me.nitkanikita21.registry;
 
 import io.vavr.Lazy;
 import lombok.Getter;
-import net.kyori.adventure.key.Key;
 
 import java.util.Set;
 
@@ -13,13 +12,13 @@ import java.util.Set;
  *
  * @param <T> the type of the value stored in the registry entry
  */
-public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
+public class LazyRegistryEntryRef<T> implements RegistryEntry<T>, Identifiable {
 
     /**
      * The key associated with this registry entry reference.
      */
     @Getter
-    private final Key key;
+    private final Identifier id;
 
     /**
      * The registry from which this entry will be retrieved.
@@ -38,14 +37,10 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
      * @param key      the key of the registry entry
      * @param registry the registry where the entry resides
      */
-    public LazyRegistryEntryRef(Key key, Registry<T> registry) {
-        this.key = key;
+    public LazyRegistryEntryRef(Identifier key, Registry<T> registry) {
+        this.id = key;
         this.registry = registry;
         lazyEntry = Lazy.of(() -> registry.getEntry(key).getOrElseThrow(RuntimeException::new));
-
-        registry.getEntry(key).on((i) -> {
-
-        });
     }
 
     /**
@@ -68,7 +63,7 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T> {
      * @throws RuntimeException if the key cannot be resolved to a registry entry
      */
     @Override
-    public Set<Key> getTags() {
+    public Set<Identifier> getTags() {
         return lazyEntry.get().getTags();
     }
 }

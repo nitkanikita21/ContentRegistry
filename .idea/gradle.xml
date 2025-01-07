@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/registry-cloud-command-framework" />
             <option value="$PROJECT_DIR$/registry-configurate" />
             <option value="$PROJECT_DIR$/registry-core" />
           </set>

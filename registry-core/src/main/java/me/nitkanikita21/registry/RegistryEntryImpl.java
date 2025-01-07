@@ -2,7 +2,6 @@ package me.nitkanikita21.registry;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.kyori.adventure.key.Key;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,11 +17,11 @@ import java.util.stream.Collectors;
 public class RegistryEntryImpl<T> implements RegistryEntry<T> {
 
     private final Registry<T> registry;
-    private final Key key;
+    private final Identifier id;
     private final T value;
 
     @Override
-    public Set<Key> getTags() {
+    public Set<Identifier> getTags() {
         return registry.getAllTags().stream()
             .filter((tagKey) -> registry.getAllByTag(tagKey).contains(value))
             .collect(Collectors.toSet());

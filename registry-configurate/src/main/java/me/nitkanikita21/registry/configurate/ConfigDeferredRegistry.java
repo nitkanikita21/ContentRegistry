@@ -1,7 +1,7 @@
 package me.nitkanikita21.registry.configurate;
 
+import me.nitkanikita21.registry.Identifier;
 import me.nitkanikita21.registry.Registry;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -15,12 +15,12 @@ public class ConfigDeferredRegistry<T> {
     private final String id;
     private Map<String, T> values = new HashMap<>();
 
-    public ConfigDeferredRegistry(Key id) {
-        this.id = id.asString();
+    public ConfigDeferredRegistry(Identifier id) {
+        this.id = id.toString();
     }
 
     public ConfigDeferredRegistry(Registry<T> registry) {
-        this.id = registry.key().asString();
+        this.id = registry.getId().toString();
     }
 
     public ConfigDeferredRegistry() {
@@ -30,7 +30,7 @@ public class ConfigDeferredRegistry<T> {
     public void registerAll(@Nullable Consumer<T> afterRegister) {
         Registry<T> registry = getRegistry();
         values.forEach((key, value) -> {
-            registry.register(Key.key(key), value);
+            registry.register(new Identifier(key), value);
             if (afterRegister != null) afterRegister.accept(value);
         });
     }
@@ -40,7 +40,7 @@ public class ConfigDeferredRegistry<T> {
     }
 
     public Registry<T> getRegistry() {
-        return (Registry<T>) Registry.REGISTRY.get(Key.key(id))
+        return (Registry<T>) Registry.REGISTRY.get(new Identifier(id))
             .getOrElseThrow(RuntimeException::new);
     }
 }

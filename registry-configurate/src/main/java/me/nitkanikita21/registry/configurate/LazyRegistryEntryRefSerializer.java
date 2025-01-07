@@ -1,7 +1,7 @@
 package me.nitkanikita21.registry.configurate;
 
+import me.nitkanikita21.registry.Identifier;
 import me.nitkanikita21.registry.Registry;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -22,8 +22,8 @@ public class LazyRegistryEntryRefSerializer implements TypeSerializer<LazyRegist
         assert node.hasChild("from");
         assert node.hasChild("id");
 
-        Key registryKey = Key.key(node.node("from").getString());
-        Key valueKey = Key.key(node.node("id").getString());
+        Identifier registryKey = new Identifier(node.node("from").getString());
+        Identifier valueKey = new Identifier(node.node("id").getString());
 
         Registry<?> registry = Registry.REGISTRY.get(registryKey).getOrElseThrow(RuntimeException::new);
 
@@ -41,8 +41,8 @@ public class LazyRegistryEntryRefSerializer implements TypeSerializer<LazyRegist
         assert type instanceof ParameterizedType;
         assert ((ParameterizedType) type).getActualTypeArguments().length == 1;
 
-        node.node("from").set(obj.getRegistry().key().asString());
-        node.node("id").set(obj.getKey().asString());
+        node.node("from").set(obj.getRegistry().getId().toString());
+        node.node("id").set(obj.getId().toString());
 
     }
 }
