@@ -9,4 +9,3 @@ plugins {
 rootProject.name = "ContentRegistry"
 include("registry-configurate")
 include("registry-core")
-include("registry-cloud-command-framework")
