@@ -1,5 +1,7 @@
 package me.nitkanikita21.registry;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Set;
 
 /**
@@ -14,20 +16,20 @@ public interface RegistryEntry<T> extends Identifiable {
      *
      * @return the element
      */
-    T getValue();
+    @NotNull T getValue();
 
     /**
      * Gets the unique key associated with this registry entry.
      *
      * @return the unique key
      */
-    Identifier getId();
+    @NotNull Identifier getId();
 
     /**
      * Gets the tags associated with this registry entry.
      *
      * @return a set of tags associated with the entry
      */
-    Set<Identifier> getTags();
+     Set<Identifier> getTags();
 
 }

@@ -2,6 +2,7 @@ package me.nitkanikita21.registry;
 
 import io.vavr.Lazy;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -51,7 +52,7 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T>, Identifiable {
      * @throws RuntimeException if the key cannot be resolved to a registry entry
      */
     @Override
-    public T getValue() {
+    public @NotNull T getValue() {
         return lazyEntry.get().getValue();
     }
 

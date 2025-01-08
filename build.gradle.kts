@@ -1,14 +1,20 @@
 plugins {
     `java-library`
     `maven-publish`
+    alias(libs.plugins.plugin.yml) apply false
+    alias(libs.plugins.run.paper) apply false
+    alias(libs.plugins.shadowJar) apply false
 }
 
 group = "me.nitkanikita21"
 version = "1.0"
 
+val projectsToPublish = listOf(
+    ":registry-core",
+    ":registry-configurate"
+).map { project(it) }
+
 subprojects {
-    apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
 
     repositories {
         mavenCentral()
@@ -16,6 +22,11 @@ subprojects {
         maven("https://repo.codemc.org/repository/maven-public/")
         maven("https://maven.enginehub.org/repo/")
     }
+
+    if(!projectsToPublish.contains(this)) return@subprojects
+
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
 
     publishing {
         publications {

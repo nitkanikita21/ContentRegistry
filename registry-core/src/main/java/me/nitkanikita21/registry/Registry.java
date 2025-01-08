@@ -1,6 +1,7 @@
 package me.nitkanikita21.registry;
 
 import io.vavr.control.Option;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface Registry<T> extends Identifiable {
 
     Registry<Registry<?>> REGISTRY = new RegistryImpl<>(
-        new Identifier("registry")
+        new Identifier("registry:registry")
     );
 
     static <T> Registry<T> create(Identifier key) {

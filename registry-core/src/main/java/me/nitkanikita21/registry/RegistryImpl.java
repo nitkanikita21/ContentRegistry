@@ -27,7 +27,8 @@ public class RegistryImpl<T> implements Registry<T> {
 
     @Override
     public RegistryEntry<T> register(Identifier id, T value) {
-        return new RegistryEntryImpl<>(this, id, entries.put(id, value));
+        entries.put(id, value);
+        return new RegistryEntryImpl<>(this, id, value);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class RegistryImpl<T> implements Registry<T> {
     }
 
     @Override
-    public void addToTag(Identifier id, Identifier tag) {
+    public void addToTag(Identifier tag, Identifier id) {
         tags.computeIfAbsent(tag, k -> new HashSet<>()).add(id);
     }
 

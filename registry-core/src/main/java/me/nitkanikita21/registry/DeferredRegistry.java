@@ -31,7 +31,7 @@ public class DeferredRegistry<T> {
      * A callback function that is executed after an item is registered.
      */
     @Getter
-    final Consumer<T> afterRegistry;
+    final RegistrationCallback<T> afterRegistry;
 
     /**
      * Constructs a DeferredRegistry with a given namespace and registry, without an after-registration callback.
@@ -52,7 +52,7 @@ public class DeferredRegistry<T> {
      * @param registry the underlying registry where items will be registered
      * @param afterRegistry a callback to execute after registering each item
      */
-    public DeferredRegistry(String namespace, RegistryImpl<T> registry, Consumer<T> afterRegistry) {
+    public DeferredRegistry(String namespace, RegistryImpl<T> registry, RegistrationCallback<T> afterRegistry) {
         this.namespace = namespace;
         this.registry = registry;
         this.afterRegistry = afterRegistry;
@@ -83,7 +83,7 @@ public class DeferredRegistry<T> {
     public void registerAll() {
         items.forEach((id, item) -> {
             if(afterRegistry != null) {
-                afterRegistry.accept(item);
+                afterRegistry.onRegistered(item, id, registry);
             }
             registry.register(id, item);
         });
@@ -91,5 +91,9 @@ public class DeferredRegistry<T> {
 
     public Map<Identifier, T> getItems() {
         return ImmutableMap.copyOf(items);
+    }
+
+    public interface RegistrationCallback<T> {
+        void onRegistered(T item, Identifier id, Registry<T> registry);
     }
 }

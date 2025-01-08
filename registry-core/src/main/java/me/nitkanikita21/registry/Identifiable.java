@@ -1,5 +1,7 @@
 package me.nitkanikita21.registry;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface Identifiable {
-    Identifier getId();
+    @NotNull Identifier getId();
 }
