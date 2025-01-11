@@ -2,7 +2,6 @@ package me.nitkanikita21.registry;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
-import net.kyori.adventure.key.Key;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class DeferredRegistry<T> {
      * A callback function that is executed after an item is registered.
      */
     @Getter
-    final Consumer<T> afterRegistry;
+    final RegistrationCallback<T> afterRegistry;
 
     /**
      * Constructs a DeferredRegistry with a given namespace and registry, without an after-registration callback.
@@ -53,7 +52,7 @@ public class DeferredRegistry<T> {
      * @param registry the underlying registry where items will be registered
      * @param afterRegistry a callback to execute after registering each item
      */
-    public DeferredRegistry(String namespace, RegistryImpl<T> registry, Consumer<T> afterRegistry) {
+    public DeferredRegistry(String namespace, RegistryImpl<T> registry, RegistrationCallback<T> afterRegistry) {
         this.namespace = namespace;
         this.registry = registry;
         this.afterRegistry = afterRegistry;
@@ -62,7 +61,7 @@ public class DeferredRegistry<T> {
     /**
      * A map of items to be registered, with their associated keys.
      */
-    final Map<Key, T> items = new HashMap<>();
+    final Map<Identifier, T> items = new HashMap<>();
 
     /**
      * Registers an item with a given path and returns the registered item.
@@ -73,7 +72,7 @@ public class DeferredRegistry<T> {
      * @return the registered item
      */
     public <I extends T> I register(String path, I value) {
-        items.put(Key.key(namespace, path), value);
+        items.put(new Identifier(namespace, path), value);
         return value;
     }
 
@@ -84,13 +83,17 @@ public class DeferredRegistry<T> {
     public void registerAll() {
         items.forEach((id, item) -> {
             if(afterRegistry != null) {
-                afterRegistry.accept(item);
+                afterRegistry.onRegistered(item, id, registry);
             }
             registry.register(id, item);
         });
     }
 
-    public Map<Key, T> getItems() {
+    public Map<Identifier, T> getItems() {
         return ImmutableMap.copyOf(items);
+    }
+
+    public interface RegistrationCallback<T> {
+        void onRegistered(T item, Identifier id, Registry<T> registry);
     }
 }

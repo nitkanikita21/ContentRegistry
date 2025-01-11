@@ -1,63 +1,62 @@
 package me.nitkanikita21.registry;
 
 import io.vavr.control.Option;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Iterator;
 import java.util.List;
 
 /**
- * Represents a registry that maps unique keys to elements of type T.
+ * Represents a registry that maps unique ids to elements of type T.
  * Provides methods to register, retrieve, and manage elements in the registry.
  * Supports both dynamic and frozen registries.
  *
  * @param <T> the type of elements stored in the registry
  */
-public interface Registry<T> extends Keyed {
+public interface Registry<T> extends Identifiable {
 
     Registry<Registry<?>> REGISTRY = new RegistryImpl<>(
-        Key.key("registry")
+        new Identifier("registry:registry")
     );
 
-    static <T> Registry<T> create(Key key) {
+    static <T> Registry<T> create(Identifier key) {
         return (Registry<T>) REGISTRY.register(key, new RegistryImpl<T>(key)).getValue();
     }
 
     /**
-     * Registers an object in the registry under a specific key.
+     * Registers an object in the registry under a specific id.
      * This operation can only be performed if the registry is dynamic.
      *
-     * @param key   the unique identifier for the element
+     * @param id   the unique identifier for the element
      * @param value the element to be registered
      * @return the registered element wrapped as a RegistryEntry
      * @throws IllegalStateException if the registry is frozen
      */
-    RegistryEntry<T> register(Key key, T value);
+    RegistryEntry<T> register(Identifier id, T value);
 
     /**
-     * Retrieves an element from the registry by its unique key.
+     * Retrieves an element from the registry by its unique id.
      *
-     * @param key the unique identifier
+     * @param id the unique identifier
      * @return the element if found, or Option.empty() if not found
      */
-    Option<T> get(Key key);
+    Option<T> get(Identifier id);
 
     /**
-     * Retrieves the RegistryEntry containing the element and its metadata from the registry by its unique key.
+     * Retrieves the RegistryEntry containing the element and its metadata from the registry by its unique id.
      *
-     * @param key the unique identifier
+     * @param id the unique identifier
      * @return the RegistryEntry if found, or Option.empty() if not found
      */
-    Option<RegistryEntry<T>> getEntry(Key key);
+    Option<RegistryEntry<T>> getEntry(Identifier id);
 
     /**
-     * Checks if an element exists in the registry with the specified key.
+     * Checks if an element exists in the registry with the specified id.
      *
-     * @param key the unique identifier
+     * @param id the unique identifier
      * @return true if the element exists in the registry
      */
-    boolean contains(Key key);
+    boolean contains(Identifier id);
 
     /**
      * Freezes the registry, preventing further registrations.
@@ -87,29 +86,29 @@ public interface Registry<T> extends Keyed {
     List<RegistryEntry<T>> getAll();
 
     /**
-     * Sets a tag for a list of keys, associating them with the specified tag.
+     * Sets a tag for a list of ids, associating them with the specified tag.
      *
      * @param tag the tag to be associated with the elements
-     * @param keys the list of keys that should be associated with the tag
+     * @param ids the list of ids that should be associated with the tag
      */
-    void setTag(Key tag, List<Key> keys);
+    void setTag(Identifier tag, List<Identifier> ids);
 
     /**
      * Adds an entry to an existing tag.
      *
      * @param tag the tag to which the element should be added
-     * @param key the key of the element to add to the tag
+     * @param id the id of the element to add to the tag
      */
-    void addToTag(Key tag, Key key);
+    void addToTag(Identifier tag, Identifier id);
 
     /**
      * Adds an entry to an existing tag.
      *
      * @param tag the tag to which the element should be added
-     * @param keys the keys of the elements to add to the tag
+     * @param ids the ids of the elements to add to the tag
      */
-    default void addToTag(Key tag, Key... keys) {
-        for (Key key : keys) {
+    default void addToTag(Identifier tag, Identifier... ids) {
+        for (Identifier key : ids) {
             addToTag(tag, key);
         }
     }
@@ -120,7 +119,7 @@ public interface Registry<T> extends Keyed {
      * @param tag the tag to search for elements
      * @return the list of elements associated with the tag
      */
-    List<RegistryEntry<T>> getAllEntriesByTag(Key tag);
+    List<RegistryEntry<T>> getAllEntriesByTag(Identifier tag);
 
     /**
      * Retrieves all elements associated with a specific tag.
@@ -128,7 +127,7 @@ public interface Registry<T> extends Keyed {
      * @param tag the tag to search for elements
      * @return the list of elements associated with the tag
      */
-    List<T> getAllByTag(Key tag);
+    List<T> getAllByTag(Identifier tag);
 
-    List<Key> getAllTags();
+    List<Identifier> getAllTags();
 }

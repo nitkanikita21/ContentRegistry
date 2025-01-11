@@ -1,31 +1,49 @@
 package me.nitkanikita21.registry.configurate;
 
+import me.nitkanikita21.registry.Identifier;
+import me.nitkanikita21.registry.LazyRegistryEntryRef;
 import me.nitkanikita21.registry.Registry;
-import net.kyori.adventure.key.Key;
+import me.nitkanikita21.registry.exception.RegistryEntryNotFoundException;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializer;
-import me.nitkanikita21.registry.LazyRegistryEntryRef;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 public class LazyRegistryEntryRefSerializer implements TypeSerializer<LazyRegistryEntryRef<?>> {
     @Override
-    public LazyRegistryEntryRef<?> deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        assert node != null;
+    public LazyRegistryEntryRef<?> deserialize(Type type, ConfigurationNode node) throws SerializationException, AssertionError {
+        Objects.requireNonNull(node);
 
-        assert type instanceof ParameterizedType;
-        assert ((ParameterizedType) type).getActualTypeArguments().length == 1;
+        assert type instanceof ParameterizedType : "Must be ParameterizedType";
+        assert ((ParameterizedType) type).getActualTypeArguments().length == 1 : "Must contains generic type";
 
-        assert node.hasChild("from");
-        assert node.hasChild("id");
+        Identifier registryKey;
+        Identifier valueKey;
 
-        Key registryKey = Key.key(node.node("from").getString());
-        Key valueKey = Key.key(node.node("id").getString());
+        if (node.isMap()) {
+            assert node.hasChild("from") : "Must contains child node \"from\"";
+            assert node.hasChild("id") : "Must contains child node \"id\"";
 
-        Registry<?> registry = Registry.REGISTRY.get(registryKey).getOrElseThrow(RuntimeException::new);
+            registryKey = new Identifier(node.node("from").getString());
+            valueKey = new Identifier(node.node("id").getString());
+        } else {
+            String[] nodeContent = node.getString().split("/");
+
+            registryKey = new Identifier(nodeContent[0]);
+            valueKey = new Identifier(nodeContent[1]);
+        }
+
+        Registry<?> registry = Registry.REGISTRY.get(registryKey).getOrElseThrow(() ->
+            new SerializationException(
+                new RegistryEntryNotFoundException(
+                    String.format("Registry entry %s not found in registry %s", valueKey, registryKey)
+                )
+            )
+        );
 
         return new LazyRegistryEntryRef<>(valueKey, registry);
 
@@ -33,16 +51,15 @@ public class LazyRegistryEntryRefSerializer implements TypeSerializer<LazyRegist
 
     @Override
     public void serialize(Type type, @Nullable LazyRegistryEntryRef<?> obj, ConfigurationNode node) throws SerializationException {
-        if(obj == null) {
+        if (obj == null) {
             node.set(null);
             return;
         }
 
-        assert type instanceof ParameterizedType;
-        assert ((ParameterizedType) type).getActualTypeArguments().length == 1;
+        assert type instanceof ParameterizedType : "Must be ParameterizedType";
+        assert ((ParameterizedType) type).getActualTypeArguments().length == 1 : "Must contains generic type";
 
-        node.node("from").set(obj.getRegistry().key().asString());
-        node.node("id").set(obj.getKey().asString());
+        node.set(String.class, obj.getRegistry().getId() + "/" + obj.getId());
 
     }
 }

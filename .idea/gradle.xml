@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/registry-configurate" />
             <option value="$PROJECT_DIR$/registry-core" />
+            <option value="$PROJECT_DIR$/registry-example-paper" />
           </set>
         </option>
       </GradleProjectSettings>

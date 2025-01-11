@@ -3,9 +3,8 @@ package me.nitkanikita21.registry;
 import com.google.common.collect.Lists;
 import io.vavr.control.Option;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.kyori.adventure.key.Key;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -18,31 +17,33 @@ import java.util.*;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class RegistryImpl<T> implements Registry<T> {
 
-    private final Key id;
+    @Getter
+    private final Identifier id;
 
-    private final Map<Key, T> entries = new HashMap<>();
-    private final Map<Key, Set<Key>> tags = new HashMap<>();
+    private final Map<Identifier, T> entries = new HashMap<>();
+    private final Map<Identifier, Set<Identifier>> tags = new HashMap<>();
 
     private boolean isFrozen = false;
 
     @Override
-    public RegistryEntry<T> register(Key key, T value) {
-        return new RegistryEntryImpl<>(this, key, entries.put(key, value));
+    public RegistryEntry<T> register(Identifier id, T value) {
+        entries.put(id, value);
+        return new RegistryEntryImpl<>(this, id, value);
     }
 
     @Override
-    public Option<T> get(Key key) {
-        return Option.of(entries.get(key));
+    public Option<T> get(Identifier id) {
+        return Option.of(entries.get(id));
     }
 
     @Override
-    public Option<RegistryEntry<T>> getEntry(Key key) {
-        return get(key).map(obj -> new RegistryEntryImpl<>(this, key, obj));
+    public Option<RegistryEntry<T>> getEntry(Identifier id) {
+        return get(id).map(obj -> new RegistryEntryImpl<>(this, id, obj));
     }
 
     @Override
-    public boolean contains(Key key) {
-        return entries.containsKey(key);
+    public boolean contains(Identifier id) {
+        return entries.containsKey(id);
     }
 
     @Override
@@ -70,27 +71,27 @@ public class RegistryImpl<T> implements Registry<T> {
     }
 
     @Override
-    public void setTag(Key tag, List<Key> keys) {
-        tags.computeIfAbsent(tag, k -> new HashSet<>()).addAll(keys);
+    public void setTag(Identifier tag, List<Identifier> ids) {
+        tags.computeIfAbsent(tag, k -> new HashSet<>()).addAll(ids);
     }
 
     @Override
-    public void addToTag(Key key, Key tag) {
-        tags.computeIfAbsent(tag, k -> new HashSet<>()).add(key);
+    public void addToTag(Identifier tag, Identifier id) {
+        tags.computeIfAbsent(tag, k -> new HashSet<>()).add(id);
     }
 
     @Override
-    public List<RegistryEntry<T>> getAllEntriesByTag(Key tag) {
+    public List<RegistryEntry<T>> getAllEntriesByTag(Identifier tag) {
         return Option.of(tags.get(tag))
             .map(entriesWithTag -> entriesWithTag.stream()
-                .map(entryKey -> getEntry(entryKey).getOrNull())
+                .map(entryIdentifier -> getEntry(entryIdentifier).getOrNull())
                 .filter(Objects::nonNull)
                 .toList()
             ).getOrElse(List::of);
     }
 
     @Override
-    public List<T> getAllByTag(Key tag) {
+    public List<T> getAllByTag(Identifier tag) {
         return getAllEntriesByTag(tag)
             .stream()
             .map(RegistryEntry::getValue)
@@ -98,13 +99,8 @@ public class RegistryImpl<T> implements Registry<T> {
     }
 
     @Override
-    public List<Key> getAllTags() {
+    public List<Identifier> getAllTags() {
         return tags.keySet().stream().toList();
     }
 
-
-    @Override
-    public @NotNull Key key() {
-        return id;
-    }
 }

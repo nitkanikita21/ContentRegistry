@@ -1,7 +1,5 @@
 package me.nitkanikita21.registry;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -11,32 +9,27 @@ import java.util.Set;
  *
  * @param <T> the type of the element stored in the registry
  */
-public interface RegistryEntry<T> extends Keyed {
+public interface RegistryEntry<T> extends Identifiable {
 
     /**
      * Gets the element stored in this registry entry.
      *
      * @return the element
      */
-    T getValue();
+    @NotNull T getValue();
 
     /**
      * Gets the unique key associated with this registry entry.
      *
      * @return the unique key
      */
-    Key getKey();
+    @NotNull Identifier getId();
 
     /**
      * Gets the tags associated with this registry entry.
      *
      * @return a set of tags associated with the entry
      */
-    Set<Key> getTags();
+     Set<Identifier> getTags();
 
-    @Override
-    @NotNull
-    default Key key() {
-        return getKey();
-    }
 }

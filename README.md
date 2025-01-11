@@ -33,7 +33,7 @@ public class Items {
     public static final Item ORANGE = register("orange", new Item("Orange"));
 
     private static Item register(String path, Item item) {
-        REGISTRY.register(Key.key("my", path), item);
+        REGISTRY.register(new Identifier("my", path), item);
         return item;
     }
 }
@@ -42,7 +42,7 @@ public class Items {
 ### Accessing Items from the Registry
 
 ```java
-Option<Item> itemOption = Items.REGISTRY.get(Key.key("my:apple")); // vavr option
+Option<Item> itemOption = Items.REGISTRY.get(new Identifier("my:apple")); // vavr option
 if(!itemOption.isEmpty()){
     // If the item is found in the registry
 }
@@ -52,13 +52,13 @@ if(!itemOption.isEmpty()){
 
 ```java
 public class Tags {
-    public static final Key FRUITS = Key.key("example", "fruits");
+    public static final Key FRUITS = new Identifier("example", "fruits");
 
     static {
         ItemRegistry.ITEMS.addToTag(
             FRUITS,
-            Key.key("example", "apple"),
-            Key.key("example", "orange")
+            new Identifier("example", "apple"),
+            new Identifier("example", "orange")
         );
     }
 }

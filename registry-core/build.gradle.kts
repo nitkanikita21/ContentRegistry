@@ -1,18 +1,17 @@
 plugins {
     `java-library`
     `maven-publish`
-    kotlin("jvm")
 }
 
 group = "me.nitkanikita21"
 version = "1.0"
 
 dependencies {
-    compileOnlyApi(libs.paper.api)
+    compileOnlyApi(libs.guava)
+    api(libs.jetbrains.annotations)
     api(libs.vavr)
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
-    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {
@@ -33,7 +32,4 @@ tasks.test {
 }
 repositories {
     mavenCentral()
-}
-kotlin {
-    jvmToolchain(17)
 }
