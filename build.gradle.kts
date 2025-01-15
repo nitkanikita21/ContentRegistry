@@ -6,8 +6,10 @@ plugins {
     alias(libs.plugins.shadowJar) apply false
 }
 
-group = "me.nitkanikita21"
-version = "1.0"
+allprojects {
+    group = "me.nitkanikita21"
+    version = "1.0.0"
+}
 
 val projectsToPublish = listOf(
     ":registry-core",
@@ -28,11 +30,17 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
 
+    java {
+        withSourcesJar()
+    }
+
     publishing {
         publications {
             create<MavenPublication>("mavenJava") {
                 from(components["java"])
 
+                groupId = project.group.toString()
+                version = project.version.toString()
                 artifactId = base.archivesName.get()
 
                 pom {
@@ -58,6 +66,17 @@ subprojects {
 
         repositories {
             mavenLocal()
+
+            maven("https://repo.codemc.io/repository/nitkanikita21/") {
+                val mavenUsername = System.getenv("JENKINS_USERNAME")
+                val mavenPassword = System.getenv("JENKINS_PASSWORD")
+                if(mavenUsername != null && mavenPassword != null) {
+                    credentials {
+                        username = mavenUsername
+                        password = mavenPassword
+                    }
+                }
+            }
         }
     }
 }
