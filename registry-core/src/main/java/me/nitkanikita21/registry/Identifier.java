@@ -33,7 +33,7 @@ public class Identifier implements Identifiable {
 
 
     @Override
-    public @NotNull Identifier getId() {
+    public @NotNull Identifier getIdentifier() {
         return this;
     }
 }

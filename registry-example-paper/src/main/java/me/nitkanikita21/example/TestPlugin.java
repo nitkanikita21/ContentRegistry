@@ -56,7 +56,7 @@ public class TestPlugin extends JavaPlugin {
 
         var sender = getServer().getConsoleSender();
         ItemRegistry.REGISTRY.getAll().forEach((entry) -> {
-            sender.sendMessage(entry.getId().toString());
+            sender.sendMessage(entry.getIdentifier().toString());
             entry.getTags().forEach(t -> {
                 sender.sendMessage("   # " + t.toString());
             });

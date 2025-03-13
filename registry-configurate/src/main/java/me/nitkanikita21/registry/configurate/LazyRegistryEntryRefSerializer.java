@@ -59,7 +59,7 @@ public class LazyRegistryEntryRefSerializer implements TypeSerializer<LazyRegist
         assert type instanceof ParameterizedType : "Must be ParameterizedType";
         assert ((ParameterizedType) type).getActualTypeArguments().length == 1 : "Must contains generic type";
 
-        node.set(String.class, obj.getRegistry().getId() + "/" + obj.getId());
+        node.set(String.class, obj.getRegistry().getIdentifier() + "/" + obj.getIdentifier());
 
     }
 }

@@ -1,7 +1,6 @@
 package me.nitkanikita21.registry;
 
 import io.vavr.control.Option;
-import org.jetbrains.annotations.Contract;
 
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +20,12 @@ public interface Registry<T> extends Identifiable {
 
     static <T> Registry<T> create(Identifier key) {
         return (Registry<T>) REGISTRY.register(key, new RegistryImpl<T>(key)).getValue();
+    }
+
+    default Option<Identifier> getIdentifier(T value) {
+        return io.vavr.collection.Iterator.ofAll(getAll())
+            .find(regEntry -> regEntry.getValue() == value)
+            .map(RegistryEntry::getIdentifier);
     }
 
     /**

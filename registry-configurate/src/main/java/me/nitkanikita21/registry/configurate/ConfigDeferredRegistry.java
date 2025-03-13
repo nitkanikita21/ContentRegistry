@@ -22,7 +22,7 @@ public class ConfigDeferredRegistry<T> {
     }
 
     public ConfigDeferredRegistry(Registry<T> registry) {
-        this.id = registry.getId().toString();
+        this.id = registry.getIdentifier().toString();
     }
 
     private ConfigDeferredRegistry() {

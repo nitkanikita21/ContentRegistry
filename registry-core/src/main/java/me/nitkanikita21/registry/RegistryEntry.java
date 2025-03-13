@@ -23,7 +23,7 @@ public interface RegistryEntry<T> extends Identifiable {
      *
      * @return the unique key
      */
-    @NotNull Identifier getId();
+    @NotNull Identifier getIdentifier();
 
     /**
      * Gets the tags associated with this registry entry.
