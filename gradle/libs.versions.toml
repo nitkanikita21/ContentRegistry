@@ -4,6 +4,8 @@ vavr = "0.10.5"
 lombok = "1.18.36"
 guava = "33.4.0-jre"
 jetbrains-annotations = "26.0.1"
+cloud-framework = "2.0.0-beta.10"
+paper = "1.21.1-R0.1-SNAPSHOT"
 
 
 [libraries]
@@ -12,6 +14,18 @@ sponge-configurate = { module = "org.spongepowered:configurate-core", version.re
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 guava = { module = "com.google.guava:guava", version.ref = "guava"}
 jetbrains-annotations = {module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations"}
+
+cloud-bukkit = { module = "org.incendo:cloud-bukkit", version.ref = "cloud-framework" }
+cloud-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-framework" }
+cloud-minecraft-extras = { module = "org.incendo:cloud-minecraft-extras", version.ref = "cloud-framework" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+
+[bundles]
+cloud-framework = [
+    "cloud-bukkit",
+    "cloud-paper",
+    "cloud-minecraft-extras"
+]
 
 [plugins]
 plugin-yml = {id = "net.minecrell.plugin-yml.paper", version = "0.6.0"}

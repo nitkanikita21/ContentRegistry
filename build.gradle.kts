@@ -8,12 +8,13 @@ plugins {
 
 allprojects {
     group = "me.nitkanikita21"
-    version = "1.1.0"
+    version = "1.2.0-SNAPSHOT"
 }
 
 val projectsToPublish = listOf(
     ":registry-core",
-    ":registry-configurate"
+    ":registry-configurate",
+    ":registry-cloud-framework"
 ).map { project(it) }
 
 subprojects {

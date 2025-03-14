@@ -3,8 +3,14 @@ package me.nitkanikita21.example;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.nitkanikita21.example.config.TestConfig;
+import me.nitkanikita21.registry.cloud.RegistryCloudFrameworkIntegration;
 import me.nitkanikita21.registry.configurate.RegistryConfigurate;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.minecraft.extras.MinecraftHelp;
+import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.util.sender.PaperSimpleSenderMapper;
+import org.incendo.cloud.paper.util.sender.Source;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
@@ -13,6 +19,8 @@ import java.io.IOException;
 
 @Slf4j
 public class TestPlugin extends JavaPlugin {
+    PaperCommandManager<Source> commandManager;
+
 
     @Override
     @SneakyThrows
@@ -61,10 +69,22 @@ public class TestPlugin extends JavaPlugin {
                 sender.sendMessage("   # " + t.toString());
             });
         });
+
+
+        initCommandManager();
+        RegistryCloudFrameworkIntegration.initializePaper(commandManager);
+        new Commands(commandManager).initialize();
     }
 
     private void freezeRegistries() {
         ItemRegistry.REGISTRY.freeze();
+    }
+
+    private void initCommandManager() {
+        commandManager = PaperCommandManager.builder(PaperSimpleSenderMapper.simpleSenderMapper())
+            .executionCoordinator(ExecutionCoordinator.asyncCoordinator())
+            .buildOnEnable(this);
+        commandManager.captionRegistry().registerProvider(MinecraftHelp.defaultCaptionsProvider());
     }
 
 }

@@ -12,3 +12,4 @@ rootProject.name = "ContentRegistry"
 include("registry-configurate")
 include("registry-core")
 include("registry-example-paper")
+include("registry-cloud-framework")

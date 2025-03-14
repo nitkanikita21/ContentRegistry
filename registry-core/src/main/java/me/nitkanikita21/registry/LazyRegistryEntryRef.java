@@ -19,7 +19,7 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T>, Identifiable {
      * The key associated with this registry entry reference.
      */
     @Getter
-    private final Identifier id;
+    private final Identifier identifier;
 
     /**
      * The registry from which this entry will be retrieved.
@@ -39,7 +39,7 @@ public class LazyRegistryEntryRef<T> implements RegistryEntry<T>, Identifiable {
      * @param registry the registry where the entry resides
      */
     public LazyRegistryEntryRef(Identifier key, Registry<T> registry) {
-        this.id = key;
+        this.identifier = key;
         this.registry = registry;
         lazyEntry = Lazy.of(() -> registry.getEntry(key).getOrElseThrow(RuntimeException::new));
     }

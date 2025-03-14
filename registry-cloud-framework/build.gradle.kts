@@ -5,6 +5,9 @@ plugins {
 
 java {
     withSourcesJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 dependencies {
@@ -12,5 +15,7 @@ dependencies {
     api(libs.sponge.configurate)
 
     compileOnly(libs.lombok)
+    compileOnly(libs.bundles.cloud.framework)
+    compileOnly(libs.paper)
     annotationProcessor(libs.lombok)
 }

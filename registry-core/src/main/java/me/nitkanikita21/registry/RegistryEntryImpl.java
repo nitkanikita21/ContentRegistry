@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class RegistryEntryImpl<T> implements RegistryEntry<T> {
 
     private final Registry<T> registry;
-    private final Identifier id;
+    private final Identifier identifier;
     private final T value;
 
     @Override

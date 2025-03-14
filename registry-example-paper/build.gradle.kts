@@ -1,3 +1,5 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+
 plugins {
     `java-library`
     `maven-publish`
@@ -12,12 +14,21 @@ version = "1.0"
 dependencies {
     implementation(project(":registry-core"))
     implementation(project(":registry-configurate"))
+    implementation(project(":registry-cloud-framework"))
     library("org.spongepowered:configurate-hocon:4.1.2")
+    library(libs.bundles.cloud.framework)
 
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+}
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 tasks.test {
@@ -25,13 +36,11 @@ tasks.test {
 }
 
 tasks.runServer {
-    minecraftVersion("1.20.4")
+    minecraftVersion("1.21.1")
 
     downloadPlugins {
         modrinth("ViaVersion", "5.0.3")
         modrinth("ViaBackwards", "5.0.3")
-        modrinth("ServerUtils", "3.5.4")
-        hangar("TabTPS", "1.3.21")
     }
 }
 
@@ -39,6 +48,7 @@ paper {
     main = "me.nitkanikita21.example.TestPlugin"
     loader = "me.nitkanikita21.example.TestPluginLoader"
     generateLibrariesJson = true
+    load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
 
-    apiVersion = "1.20"
+    apiVersion = "1.21"
 }

@@ -18,7 +18,7 @@ import java.util.*;
 public class RegistryImpl<T> implements Registry<T> {
 
     @Getter
-    private final Identifier id;
+    private final Identifier identifier;
 
     private final Map<Identifier, T> entries = new HashMap<>();
     private final Map<Identifier, Set<Identifier>> tags = new HashMap<>();
