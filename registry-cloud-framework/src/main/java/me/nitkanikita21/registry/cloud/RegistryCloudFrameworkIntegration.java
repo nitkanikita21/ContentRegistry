@@ -52,9 +52,6 @@ public class RegistryCloudFrameworkIntegration {
                 }
             );
         });
-
-
-        System.out.println("s");
     }
 
     @UtilityClass
