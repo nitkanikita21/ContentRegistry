@@ -1,4 +1,6 @@
 # 🗃️ ContentRegistry
+[![Build Status](https://ci.codemc.io/job/nitkanikita21/job/ContentRegistry/badge/icon)](https://ci.codemc.io/job/nitkanikita21/job/ContentRegistry/)
+![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/me.nitkanikita21/registry-core?server=https%3A%2F%2Frepo.codemc.io)
 
 **ContentRegistry** is a lightweight and extensible library for using registry system. Inspired by systems like
 Minecraft's `Registry`, it provides a flexible API for registering, organizing, and retrieving content. The library
