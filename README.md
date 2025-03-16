@@ -15,8 +15,6 @@ This is a system that allows you to store any content in a single repository ind
 path” type. Registries can act as a “source of truth” to ensure data validity. At its core, it is a dictionary with
 additional functionality for convenient work.
 
----
-
 ## 📌 Use it
 
 ### Gradle (Kotlin dsl)
@@ -28,8 +26,8 @@ repositories {
 dependencies {
     val registryVer = "1.2.0-SNAPSHOT"
     implementation("me.nitkanikita21:registry-core:$registryVer")
-    implementation("me.nitkanikita21:registry-configurate$registryVer") // SpongePowered/Configurate integration
-    implementation("me.nitkanikita21:registry-cloud-framework$registryVer") // Cloud Command Framework integration
+    implementation("me.nitkanikita21:registry-configurate:$registryVer") // SpongePowered/Configurate integration
+    implementation("me.nitkanikita21:registry-cloud-framework:$registryVer") // Cloud Command Framework integration
 }
 ```
 
@@ -42,7 +40,6 @@ dependencies {
 > [!TIP]
 > For the PluginLoader system, I recommend using the [eldoriarpg/plugin-yml](https://github.com/eldoriarpg/plugin-yml) plugin to generate a meta-file of
 > dependencies to be loaded. [Check out the wiki of this plugin for more information](https://github.com/eldoriarpg/plugin-yml/wiki/Plugin-Libraries-JSON)
----
 
 ## 🧩 Features
 
@@ -61,7 +58,7 @@ dependencies {
 ```java
 // Define a registry for items
 public class Items {
-    public static final Registry<Item> REGISTRY = Registry.create(Key.key("my:items"));
+    public static final Registry<Item> REGISTRY = Registry.create(new Identifier("my:items"));
 
     // Register items statically
     public static final Item APPLE = register("apple", new Item("Apple"));
@@ -135,7 +132,6 @@ public class Register {
 }
 ```
 
----
 # 📜 License
 
 This project is licensed under the [MIT License](./LICENSE). You are free to use, modify, and distribute the code as
