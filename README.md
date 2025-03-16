@@ -8,8 +8,38 @@ supports features such as lazy-loaded registry entries, deferred registration, t
 pull request with your ideas.
 
 ## ❓ What is Registry
-This is a system that allows you to store any content in a single repository indexed by an identifier of the “namespace:path” type. Registries can act as a “source of truth” to ensure data validity. At its core, it is a dictionary with additional functionality for convenient work.
 
+This is a system that allows you to store any content in a single repository indexed by an identifier of the “namespace:
+path” type. Registries can act as a “source of truth” to ensure data validity. At its core, it is a dictionary with
+additional functionality for convenient work.
+
+---
+
+## 📌 Use it
+
+### Gradle (Kotlin dsl)
+
+```kt
+repositories {
+    maven("https://repo.codemc.io/repository/nitkanikita21/")
+}
+dependencies {
+    val registryVer = "1.2.0-SNAPSHOT"
+    implementation("me.nitkanikita21:registry-core:$registryVer")
+    implementation("me.nitkanikita21:registry-configurate$registryVer") // SpongePowered/Configurate integration
+    implementation("me.nitkanikita21:registry-cloud-framework$registryVer") // Cloud Command Framework integration
+}
+```
+
+> [!IMPORTANT]  
+> You need to ensure that classes are available at runtime. You can use
+> the [Shadow Gradle Plugin](https://gradleup.com/shadow/) plugin for Gradle or load
+> dependencies at server startup using
+> the [PluginLoader system in Paper plugins](https://docs.papermc.io/paper/dev/getting-started/paper-plugins#loaders)
+
+> [!TIP]
+> For the PluginLoader system, I recommend using the [eldoriarpg/plugin-yml](https://github.com/eldoriarpg/plugin-yml) plugin to generate a meta-file of
+> dependencies to be loaded. [Check out the wiki of this plugin for more information](https://github.com/eldoriarpg/plugin-yml/wiki/Plugin-Libraries-JSON)
 ---
 
 ## 🧩 Features
@@ -46,10 +76,10 @@ public class Items {
 
 ```java
 void main() {
-  Option<Item> itemOption = Items.REGISTRY.get(new Identifier("my:apple")); // vavr option
-  itemOption.peek(item -> {
-      // Process the item if it exists
-  });
+    Option<Item> itemOption = Items.REGISTRY.get(new Identifier("my:apple")); // vavr option
+    itemOption.peek(item -> {
+        // Process the item if it exists
+    });
 }
 ```
 
@@ -70,10 +100,10 @@ public class Tags {
 
 // Accessing items by tag
 void main() {
-  List<Item> fruits = ItemRegistry.ITEMS.getAllByTag(Tags.FRUITS);
+    List<Item> fruits = ItemRegistry.ITEMS.getAllByTag(Tags.FRUITS);
 
-  println("Fruits in the registry:");
-  fruits.forEach(entry -> println(entry.getName())); // Process all items with tag FRUIT
+    println("Fruits in the registry:");
+    fruits.forEach(entry -> println(entry.getName())); // Process all items with tag FRUIT
 }
 ```
 
@@ -82,27 +112,28 @@ void main() {
 ```java
 // Finalize and use the deferred registry
 void main() {
-  Register.finalizeRegistry();
+    Register.finalizeRegistry();
 
-  println("Registered deferred items:");
+    println("Registered deferred items:");
 
-  println(Register.BANANA.getName()); // Output: Banana
-  println(Register.GRAPE.getName());  // Output: Grape
+    println(Register.BANANA.getName()); // Output: Banana
+    println(Register.GRAPE.getName());  // Output: Grape
 }
 
 public class Register {
-  public static final DeferredRegistry<Item> DEFERRED_ITEMS = new DeferredRegistry<>("my", ItemRegistry.ITEMS);
+    public static final DeferredRegistry<Item> DEFERRED_ITEMS = new DeferredRegistry<>("my", ItemRegistry.ITEMS);
 
-  // Register items with deferred registration
-  public static final Item BANANA = DEFERRED_ITEMS.register("banana", new Item("Banana"));
-  public static final Item GRAPE = DEFERRED_ITEMS.register("grape", new Item("Grape"));
+    // Register items with deferred registration
+    public static final Item BANANA = DEFERRED_ITEMS.register("banana", new Item("Banana"));
+    public static final Item GRAPE = DEFERRED_ITEMS.register("grape", new Item("Grape"));
 
-  public static void finalizeRegistry() {
-    DEFERRED_ITEMS.registerAll();
-  }
+    public static void finalizeRegistry() {
+        DEFERRED_ITEMS.registerAll();
+    }
 }
 ```
 
+---
 # 📜 License
 
 This project is licensed under the [MIT License](./LICENSE). You are free to use, modify, and distribute the code as
