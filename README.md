@@ -7,21 +7,24 @@ supports features such as lazy-loaded registry entries, deferred registration, t
 🙂 I appreciate constructive feedback and suggestions for improving the project. Feel free to open an issue or submit a
 pull request with your ideas.
 
+## ❓ What is Registry
+This is a system that allows you to store any content in a single repository indexed by an identifier of the “namespace:path” type. Registries can act as a “source of truth” to ensure data validity. At its core, it is a dictionary with additional functionality for convenient work.
+
 ---
 
 ## 🧩 Features
 
-- [x] **Registry Management**: Create and manage registries for any type of content.
-- [x] **Lazy Entries**: Access registry entries only when needed to optimize performance.
-- [x] **Deferred Registration**: Register content at a later stage in the lifecycle.
-- [x] **Tagging System**: Categorize and group content using a tag-based system.
-- [x] **Dynamic Registries**: Support for registries that can be modified at runtime.
-- [ ] **Deferred Content Registration from Configuration** (WIP): Register content that is loaded dynamically from
+* **Registry Management**: Create and manage registries for any type of content.
+* **Deferred Registration**: Register content at a later stage in the lifecycle.
+* **Tagging System**: Categorize and group content using a tag-based system.
+* **Frozen Registries**: You can create registries that will be blocked for registration of new entries.
+* **Lazy Entries**: Access registry entries only when needed to optimize performance.
+* **Deferred Content Registration from Configuration**: Register content that is loaded dynamically from
   configuration files (e.g., JSON, YAML).
 
 ## ✨ Basic Examples:
 
-### Defining a Registry for Items
+### 🔹 Defining a Registry for Items
 
 ```java
 // Define a registry for items
@@ -39,63 +42,68 @@ public class Items {
 }
 ```
 
-### Accessing Items from the Registry
+### 🔹 Accessing Items from the Registry
 
 ```java
-Option<Item> itemOption = Items.REGISTRY.get(new Identifier("my:apple")); // vavr option
-if(!itemOption.isEmpty()){
-    // If the item is found in the registry
+void main() {
+  Option<Item> itemOption = Items.REGISTRY.get(new Identifier("my:apple")); // vavr option
+  itemOption.peek(item -> {
+      // Process the item if it exists
+  });
 }
 ```
 
-### Grouping Items into Tags
+### 🔹 Grouping Items into Tags
 
 ```java
 public class Tags {
-    public static final Key FRUITS = new Identifier("example", "fruits");
+    public static final Key FRUITS = new Identifier("example:fruits");
 
     static {
         ItemRegistry.ITEMS.addToTag(
             FRUITS,
-            new Identifier("example", "apple"),
-            new Identifier("example", "orange")
+            new Identifier("example:apple"),
+            new Identifier("example:orange")
         );
     }
 }
 
 // Accessing items by tag
-List<Item> fruits = ItemRegistry.ITEMS.getAllByTag(Tags.FRUITS);
+void main() {
+  List<Item> fruits = ItemRegistry.ITEMS.getAllByTag(Tags.FRUITS);
 
-println("Fruits in the registry:");
-fruits.forEach(entry -> println(entry.getName()));
+  println("Fruits in the registry:");
+  fruits.forEach(entry -> println(entry.getName())); // Process all items with tag FRUIT
+}
 ```
 
-### Using Deferred Registration
+### 🔹 Using Deferred Registration
 
 ```java
-public class Register {
-    public static final DeferredRegistry<Item> DEFERRED_ITEMS = new DeferredRegistry<>("my", ItemRegistry.ITEMS);
+// Finalize and use the deferred registry
+void main() {
+  Register.finalizeRegistry();
 
-    // Register items with deferred registration
-    public static final Item BANANA = DEFERRED_ITEMS.register("banana", new Item("Banana"));
-    public static final Item GRAPE = DEFERRED_ITEMS.register("grape", new Item("Grape"));
+  println("Registered deferred items:");
 
-    public static void finalizeRegistry() {
-        DEFERRED_ITEMS.registerAll();
-    }
+  println(Register.BANANA.getName()); // Output: Banana
+  println(Register.GRAPE.getName());  // Output: Grape
 }
 
-// Finalize and use the deferred registry
-Register.finalizeRegistry();
+public class Register {
+  public static final DeferredRegistry<Item> DEFERRED_ITEMS = new DeferredRegistry<>("my", ItemRegistry.ITEMS);
 
-println("Registered deferred items:");
+  // Register items with deferred registration
+  public static final Item BANANA = DEFERRED_ITEMS.register("banana", new Item("Banana"));
+  public static final Item GRAPE = DEFERRED_ITEMS.register("grape", new Item("Grape"));
 
-println(Register.BANANA.getName()); // Output: Banana
-
-println(Register.GRAPE.getName());  // Output: Grape
+  public static void finalizeRegistry() {
+    DEFERRED_ITEMS.registerAll();
+  }
+}
 ```
 
-# License
+# 📜 License
 
 This project is licensed under the [MIT License](./LICENSE). You are free to use, modify, and distribute the code as
 long as proper attribution is given. 
