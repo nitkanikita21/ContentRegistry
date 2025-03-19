@@ -12,8 +12,7 @@ pull request with your ideas.
 ## ❓ What is Registry
 
 This is a system that allows you to store any content in a single repository indexed by an identifier of the “namespace:
-path” type. Registries can act as a “source of truth” to ensure data validity. At its core, it is a dictionary with
-additional functionality for convenient work.
+path” type. At its core, it is a dictionary with additional functionality for convenient work.
 
 ## 📌 Use it
 
