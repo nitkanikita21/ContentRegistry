@@ -36,10 +36,6 @@ dependencies {
 > dependencies at server startup using
 > the [PluginLoader system in Paper plugins](https://docs.papermc.io/paper/dev/getting-started/paper-plugins#loaders)
 
-> [!TIP]
-> For the PluginLoader system, I recommend using the [eldoriarpg/plugin-yml](https://github.com/eldoriarpg/plugin-yml) plugin to generate a meta-file of
-> dependencies to be loaded. [Check out the wiki of this plugin for more information](https://github.com/eldoriarpg/plugin-yml/wiki/Plugin-Libraries-JSON)
-
 ## 🧩 Features
 
 * **Registry Management**: Create and manage registries for any type of content.
